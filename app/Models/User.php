@@ -48,4 +48,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function stall()
+    {
+        return $this->hasOne(Stall::class);
+    }
 }
