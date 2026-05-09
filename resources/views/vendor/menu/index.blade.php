@@ -69,8 +69,8 @@
                                                     <h4 class="font-bold text-gray-800">{{ $item->name }}</h4>
                                                     <p class="text-sm text-gray-600">₱{{ number_format($item->price, 2) }}</p>
                                                 </div>
-                                                <div class="flex gap-2">
-                                                    <!-- Edit Button (could be a modal in a full implementation) -->
+                                                <div class="flex items-center gap-4">
+                                                    <a href="{{ route('vendor.menu.edit', $item->id) }}" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">Edit</a>
                                                     <form action="{{ route('vendor.menu.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Delete this item?')">
                                                         @csrf
                                                         @method('DELETE')

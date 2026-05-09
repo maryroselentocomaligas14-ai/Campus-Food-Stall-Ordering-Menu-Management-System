@@ -10,8 +10,19 @@ class FoodItemController extends Controller
     public function index()
     {
         $stall = auth()->user()->stall;
+        
+        if (!$stall) {
+            return redirect()->route('vendor.dashboard')->with('error', 'Please create your stall first!');
+        }
+
         $menuItems = $stall->foodItems;
         return view('vendor.menu.index', compact('menuItems'));
+    }
+
+    public function edit($id)
+    {
+        $item = auth()->user()->stall->foodItems()->findOrFail($id);
+        return view('vendor.menu.edit', compact('item'));
     }
 
     public function store(Request $request)
