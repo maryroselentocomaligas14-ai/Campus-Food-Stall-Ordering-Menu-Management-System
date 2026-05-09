@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\FoodItemController;
 
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\OrderController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -15,8 +18,15 @@ Route::get('/dashboard', function () {
     } elseif ($role === 'vendor') {
         return redirect()->route('vendor.dashboard');
     }
-    return view('student.dashboard');
+    return redirect()->route('student.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['auth', 'role:student'])->group(function () {
+    Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
+    Route::get('/student/stall/{stall}', [StudentController::class, 'showStall'])->name('student.stall.show');
+    Route::post('/student/order', [OrderController::class, 'store'])->name('student.order.store');
+    Route::get('/student/orders', [OrderController::class, 'index'])->name('student.orders');
+});
 
 Route::middleware(['auth', 'role:vendor'])->group(function () {
     Route::get('/vendor/dashboard', [VendorController::class, 'dashboard'])->name('vendor.dashboard');
