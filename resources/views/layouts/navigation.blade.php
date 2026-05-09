@@ -12,11 +12,16 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    @if(auth()->user()->role === 'admin')
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                            {{ __('System Overview') }}
+                        </x-nav-link>
+                    @endif
 
                     @if(auth()->user()->role === 'vendor')
+                        <x-nav-link :href="route('vendor.dashboard')" :active="request()->routeIs('vendor.dashboard')">
+                            {{ __('My Stall Dashboard') }}
+                        </x-nav-link>
                         <x-nav-link :href="route('vendor.menu.index')" :active="request()->routeIs('vendor.menu.*')">
                             {{ __('Manage Menu') }}
                         </x-nav-link>
@@ -24,7 +29,7 @@
 
                     @if(auth()->user()->role === 'student')
                         <x-nav-link :href="route('student.dashboard')" :active="request()->routeIs('student.dashboard')">
-                            {{ __('Browse Stalls') }}
+                            {{ __('Order Food') }}
                         </x-nav-link>
                         <x-nav-link :href="route('student.orders')" :active="request()->routeIs('student.orders')">
                             {{ __('My Orders') }}
@@ -82,11 +87,16 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            @if(auth()->user()->role === 'admin')
+                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                    {{ __('System Overview') }}
+                </x-responsive-nav-link>
+            @endif
 
             @if(auth()->user()->role === 'vendor')
+                <x-responsive-nav-link :href="route('vendor.dashboard')" :active="request()->routeIs('vendor.dashboard')">
+                    {{ __('My Stall Dashboard') }}
+                </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('vendor.menu.index')" :active="request()->routeIs('vendor.menu.*')">
                     {{ __('Manage Menu') }}
                 </x-responsive-nav-link>
@@ -94,7 +104,7 @@
 
             @if(auth()->user()->role === 'student')
                 <x-responsive-nav-link :href="route('student.dashboard')" :active="request()->routeIs('student.dashboard')">
-                    {{ __('Browse Stalls') }}
+                    {{ __('Order Food') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('student.orders')" :active="request()->routeIs('student.orders')">
                     {{ __('My Orders') }}
