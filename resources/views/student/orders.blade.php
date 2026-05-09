@@ -7,11 +7,6 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if(session('success'))
-                <div class="mb-6 p-4 bg-green-100 text-green-700 rounded-lg shadow-sm">
-                    {{ session('success') }}
-                </div>
-            @endif
 
             <div class="space-y-6">
                 @forelse($orders as $order)

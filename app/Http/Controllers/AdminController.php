@@ -17,8 +17,9 @@ class AdminController extends Controller
         $totalSales = Order::where('status', 'completed')->sum('total_price');
         $totalOrders = Order::count();
         $totalUsers = User::count();
+        $reviews = \App\Models\Review::with('user', 'order.stall')->latest()->take(20)->get();
 
-        return view('admin.dashboard', compact('stalls', 'totalSales', 'totalOrders', 'totalUsers'));
+        return view('admin.dashboard', compact('stalls', 'totalSales', 'totalOrders', 'totalUsers', 'reviews'));
     }
 
     public function toggleStallStatus(Stall $stall)

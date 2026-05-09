@@ -24,9 +24,23 @@ class VendorController extends Controller
                 ->where('status', 'completed')
                 ->whereDate('created_at', now()->today())
                 ->sum('total_price');
+
+            $topItems = \App\Models\OrderItem::whereHas('order', function($q) use ($stall) {
+                    $q->where('stall_id', $stall->id)->where('status', 'completed');
+                })
+                ->select('food_item_id', \DB::raw('SUM(quantity) as total_qty'))
+                ->with('foodItem')
+                ->groupBy('food_item_id')
+                ->orderByDesc('total_qty')
+                ->take(3)
+                ->get();
+            
+            $reviews = \App\Models\Review::whereHas('order', function($q) use ($stall) {
+                $q->where('stall_id', $stall->id);
+            })->with('user', 'order')->latest()->take(10)->get();
         }
 
-        return view('vendor.dashboard', compact('stall', 'orders', 'todaySales'));
+        return view('vendor.dashboard', compact('stall', 'orders', 'todaySales', 'topItems', 'reviews'));
     }
 
     public function updateOrderStatus(Request $request, \App\Models\Order $order)

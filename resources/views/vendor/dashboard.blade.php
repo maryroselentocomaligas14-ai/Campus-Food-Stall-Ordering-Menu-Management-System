@@ -7,17 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if(session('success'))
-                <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg">
-                    {{ session('success') }}
-                </div>
-            @endif
 
-            @if(session('error'))
-                <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
-                    {{ session('error') }}
-                </div>
-            @endif
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
@@ -101,6 +91,52 @@
                                 </div>
                             @endif
                         </div>
+
+                        @if($topItems->isNotEmpty())
+                            <div class="mt-12">
+                                <h3 class="text-xl font-bold text-gray-800 mb-6">{{ __('Top Selling Items') }}</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    @foreach($topItems as $item)
+                                        <div class="p-4 bg-white border rounded-lg shadow-sm flex items-center justify-between">
+                                            <div>
+                                                <p class="font-bold text-gray-800">{{ $item->foodItem->name }}</p>
+                                                <p class="text-xs text-gray-500">{{ $item->total_qty }} {{ __('sold') }}</p>
+                                            </div>
+                                            <span class="text-indigo-600">
+                                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path></svg>
+                                            </span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        @if($reviews->isNotEmpty())
+                            <div class="mt-12">
+                                <h3 class="text-xl font-bold text-gray-800 mb-6">{{ __('Recent Customer Feedback') }}</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    @foreach($reviews as $review)
+                                        <div class="p-4 border rounded-lg bg-gray-50 shadow-sm">
+                                            <div class="flex justify-between items-start mb-2">
+                                                <div>
+                                                    <span class="font-bold text-gray-800">{{ $review->user->name }}</span>
+                                                    <span class="text-gray-400 text-xs ml-2">{{ $review->created_at->diffForHumans() }}</span>
+                                                </div>
+                                                <div class="flex text-yellow-400">
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        <svg class="w-4 h-4 {{ $i <= $review->rating ? 'fill-current' : 'text-gray-300' }}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                    @endfor
+                                                </div>
+                                            </div>
+                                            <p class="text-gray-600 italic text-sm">"{{ $review->comment }}"</p>
+                                            <div class="mt-2 text-xs text-indigo-600 font-medium">
+                                                Order: {{ $review->order->queue_number }}
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                     @endif
                 </div>
             </div>

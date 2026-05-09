@@ -47,4 +47,24 @@ class OrderController extends Controller
 
         return redirect()->route('student.orders')->with('success', 'Order placed successfully! Your queue number is ' . $queueNumber);
     }
+
+    public function storeReview(Request $request, Order $order)
+    {
+        if ($order->user_id !== auth()->id() || $order->status !== 'completed') {
+            abort(403);
+        }
+
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string',
+        ]);
+
+        $order->review()->create([
+            'user_id' => auth()->id(),
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
+
+        return back()->with('success', 'Thank you for your feedback!');
+    }
 }
