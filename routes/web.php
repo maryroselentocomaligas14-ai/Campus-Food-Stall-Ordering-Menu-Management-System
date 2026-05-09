@@ -21,17 +21,19 @@ Route::get('/dashboard', function () {
     return redirect()->route('student.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::middleware(['auth', 'role:vendor'])->group(function () {
+    Route::get('/vendor/dashboard', [VendorController::class, 'dashboard'])->name('vendor.dashboard');
+    Route::post('/vendor/stall', [VendorController::class, 'createStall'])->name('vendor.stall.create');
+    Route::patch('/vendor/order/{order}/status', [VendorController::class, 'updateOrderStatus'])->name('vendor.order.status');
+    Route::resource('vendor/menu', FoodItemController::class)->names('vendor.menu');
+});
+
 Route::middleware(['auth', 'role:student'])->group(function () {
     Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
     Route::get('/student/stall/{stall}', [StudentController::class, 'showStall'])->name('student.stall.show');
     Route::post('/student/order', [OrderController::class, 'store'])->name('student.order.store');
     Route::get('/student/orders', [OrderController::class, 'index'])->name('student.orders');
-});
-
-Route::middleware(['auth', 'role:vendor'])->group(function () {
-    Route::get('/vendor/dashboard', [VendorController::class, 'dashboard'])->name('vendor.dashboard');
-    Route::post('/vendor/stall', [VendorController::class, 'createStall'])->name('vendor.stall.create');
-    Route::resource('vendor/menu', FoodItemController::class)->names('vendor.menu');
+    Route::post('/student/order/{order}/review', [OrderController::class, 'storeReview'])->name('student.order.review');
 });
 
 Route::middleware('auth')->group(function () {

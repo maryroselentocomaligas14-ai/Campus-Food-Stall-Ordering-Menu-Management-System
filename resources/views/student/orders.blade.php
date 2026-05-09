@@ -54,6 +54,33 @@
                                 <span class="text-gray-600 font-medium">{{ __('Total Amount') }}</span>
                                 <span class="text-2xl font-bold text-gray-900">₱{{ number_format($order->total_price, 2) }}</span>
                             </div>
+
+                            @if($order->status == 'completed' && !$order->review)
+                                <div class="mt-6 p-4 bg-indigo-50 rounded-lg">
+                                    <h4 class="font-bold text-indigo-800 mb-2">{{ __('How was your meal?') }}</h4>
+                                    <form action="{{ route('student.order.review', $order->id) }}" method="POST">
+                                        @csrf
+                                        <div class="flex items-center gap-4 mb-3">
+                                            <select name="rating" class="text-sm rounded-md border-gray-300">
+                                                <option value="5">5 - Excellent</option>
+                                                <option value="4">4 - Good</option>
+                                                <option value="3">3 - Average</option>
+                                                <option value="2">2 - Poor</option>
+                                                <option value="1">1 - Terrible</option>
+                                            </select>
+                                            <input type="text" name="comment" placeholder="Add a comment (optional)" class="flex-1 text-sm rounded-md border-gray-300">
+                                            <x-primary-button class="text-xs">{{ __('Submit') }}</x-primary-button>
+                                        </div>
+                                    </form>
+                                </div>
+                            @elseif($order->review)
+                                <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-yellow-500 font-bold">{{ str_repeat('★', $order->review->rating) }}</span>
+                                        <p class="text-gray-600 italic text-sm">"{{ $order->review->comment }}"</p>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @empty
